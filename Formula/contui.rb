@@ -13,12 +13,12 @@ class Contui < Formula
   depends_on :macos
 
   def install
-    system "cargo", "build", "--release", "--locked"
+    system "cargo", "install", *std_cargo_args
 
     app = buildpath/"contUI.app"
     (app/"Contents/MacOS").mkpath
     (app/"Contents/Resources").mkpath
-    cp "target/release/contui", app/"Contents/MacOS/contUI"
+    mv prefix/"bin/contui", app/"Contents/MacOS/contUI"
     if (buildpath/"assets/Info.plist").exist?
       cp "assets/Info.plist", app/"Contents/Info.plist"
     end
