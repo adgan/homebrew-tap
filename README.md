@@ -5,8 +5,9 @@ formula; the app's source lives at [adgan/contui](https://github.com/adgan/contu
 
 ## Status
 
-HEAD-only, build-from-source. There is no tagged release yet, so plain `brew install
-contui` is not available; `--HEAD` is required. The first build is long: Homebrew installs
+HEAD-only, build-from-source, pinned to the `feat/contui` rename branch until it
+merges. There is no tagged release yet, so plain `brew install contui` is not
+available; `--HEAD` is required. The first build is long: Homebrew installs
 the Rust toolchain, LLVM and their dependencies as build dependencies.
 
 ## Install

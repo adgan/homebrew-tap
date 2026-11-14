@@ -7,7 +7,8 @@ class Contui < Formula
   version "0.1.0"
   license "MIT"
 
-  head "https://github.com/adgan/contui.git", branch: "main"
+  # Pinned to the rename branch until it merges; switch to "main" after that.
+  head "https://github.com/adgan/contui.git", branch: "feat/contui"
 
   depends_on "rust" => :build
   depends_on :macos
