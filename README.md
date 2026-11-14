@@ -5,10 +5,11 @@ formula; the app's source lives at [adgan/contui](https://github.com/adgan/contu
 
 ## Status
 
-HEAD-only, build-from-source, pinned to the `feat/contui` rename branch until it
-merges. There is no tagged release yet, so plain `brew install contui` is not
-available; `--HEAD` is required. The first build is long: Homebrew installs
-the Rust toolchain, LLVM and their dependencies as build dependencies.
+HEAD-only, build-from-source. Until the `feat/contui` rename merges, the formula's `head`
+is pinned to that branch; the release checklist below flips it to `main`. There is no
+tagged release yet, so `brew install adgan/tap/contui` without `--HEAD` is unavailable —
+Homebrew answers with the `--HEAD` command. The first build is long: Homebrew installs the
+Rust toolchain, LLVM and their dependencies as build dependencies.
 
 ## Install
 
@@ -53,15 +54,23 @@ rm -f /Applications/contUI.app
 
 ## Releasing (maintainer)
 
-1. Tag the app repo: `git tag v0.1.0 && git push origin v0.1.0`.
-2. Add the stable source to `Formula/contui.rb`:
+1. Land the rename: merge `feat/contui` into `main`, set the formula's `head` to
+   `branch: "main"`, delete the pinning comment, and replace the Status section above.
+   `brew fetch --HEAD adgan/tap/contui` must resolve; the audit workflow checks it on
+   every push.
+2. Tag the app repo: `git tag v0.1.0 && git push origin v0.1.0`.
+3. Add the stable source to `Formula/contui.rb`:
    `url "https://github.com/adgan/contui/archive/refs/tags/v0.1.0.tar.gz"` with the sha256
    from `curl -sL <url> | shasum -a 256`. Keep the `head` block.
-3. Build and launch it from the stable URL: `brew install --build-from-source adgan/tap/contui`.
+4. Build and launch it from the stable URL: `brew install --build-from-source adgan/tap/contui`.
    `brew install adgan/tap/contui` must now work without `--HEAD`.
-4. `brew bottle adgan/tap/contui`; upload the bottle to a release named `bottles` in this
+5. `brew bottle adgan/tap/contui`; upload the bottle to a release named `bottles` in this
    repository and paste the generated bottle block (with `root_url` pointing at that
-   release) into the formula.
-5. Add `Casks/contui.rb` installing the prebuilt `contUI.app` from the app repo's release,
-   then change this README's install line to `brew install --cask adgan/tap/contui`.
-6. Tick Task 10 in the app repo's plan, `docs/superpowers/plans/2026-11-14-contui.md`.
+   release) into the formula. The bottle is arm64-only by design (the design targets
+   Apple silicon; Intel builds are untested), so do not advertise one for Intel.
+6. Add `Casks/contui.rb` only once the app is Developer ID-signed and notarized; a cask
+   wrapping an ad-hoc, unnotarized bundle is blocked by Gatekeeper after download. If
+   notarization is out of scope, skip the cask and keep the formula as the install path.
+   When it exists, change this README's install line to
+   `brew install --cask adgan/tap/contui`.
+7. Tick Task 10 in the app repo's plan, `docs/superpowers/plans/2026-11-14-contui.md`.

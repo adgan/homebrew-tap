@@ -19,5 +19,7 @@ jobs:
         run: brew trust adgan/tap || true
       - name: Audit
         run: brew audit --strict --online adgan/tap/contui
+      - name: Fetch HEAD
+        run: brew fetch --HEAD adgan/tap/contui
       - name: Style
         run: brew style
