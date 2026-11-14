@@ -1,0 +1,23 @@
+name: audit
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Tap this checkout
+        run: brew tap adgan/tap "$GITHUB_WORKSPACE"
+      - name: Trust the formula
+        # Older Homebrew has no tap-trust requirement, so a missing command is fine.
+        run: brew trust adgan/tap || true
+      - name: Audit
+        run: brew audit --strict --online adgan/tap/contui
+      - name: Style
+        run: brew style
