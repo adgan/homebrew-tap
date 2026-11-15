@@ -29,6 +29,9 @@ class Contui < Formula
     if (buildpath/"assets/Info.plist").exist?
       cp "assets/Info.plist", app/"Contents/Info.plist"
     end
+    if (buildpath/"assets/contUI.icns").exist?
+      cp "assets/contUI.icns", app/"Contents/Resources/contUI.icns"
+    end
     %w[fonts icons].each do |dir|
       cp_r "assets/#{dir}", app/"Contents/Resources/" if (buildpath/"assets/#{dir}").exist?
     end
