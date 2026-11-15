@@ -4,15 +4,15 @@
 class Contui < Formula
   desc "Fast native Docker client for macOS"
   homepage "https://github.com/adgan/contui"
-  url "https://github.com/adgan/contui/releases/download/v0.1.0/contui-0.1.0.tar.gz"
-  sha256 "e26f4de9b342c6325b3461dd762050fc0435fce6f3f6c4cfad2a0f795191b35c"
+  url "https://github.com/adgan/contui/releases/download/v0.1.1/contui-0.1.1.tar.gz"
+  sha256 "c301d7424753286fcaf86c5bbbb5bbb9f769760f499c6f070308add9f0c5953c"
   license "MIT"
 
   head "https://github.com/adgan/contui.git", branch: "main"
 
   bottle do
-    root_url "https://github.com/adgan/contui/releases/download/v0.1.0"
-    sha256 cellar: :any_skip_relocation, arm64_tahoe: "cb85fdd3093fc6c591500d157aba14b6d69690d746de4b923beabe014b1ee6a7"
+    root_url "https://github.com/adgan/contui/releases/download/v0.1.1"
+    sha256 cellar: :any_skip_relocation, arm64_tahoe: "4565f9ca78a0cb0dc74e6a07732601ca338c043e33c118003a6f04b177668c0b"
   end
 
   depends_on "rust" => :build
