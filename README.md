@@ -5,21 +5,22 @@ formula; the app's source lives at [adgan/contui](https://github.com/adgan/contu
 
 ## Status
 
-HEAD-only, build-from-source, tracking `main`. There is no tagged release yet, so
-`brew install adgan/tap/contui` without `--HEAD` is unavailable — Homebrew answers with
-the `--HEAD` command. The first build is long: Homebrew installs the Rust toolchain, LLVM
-and their dependencies as build dependencies.
+0.1.0 is the first tagged release, with a prebuilt bottle for arm64 macOS 26 (Tahoe).
+`brew install adgan/tap/contui` pours the bottle — no Rust toolchain, no compile. Other
+platforms have no bottle, and the formula refuses to install there.
+
+`--HEAD` still works and still builds from source, for development.
 
 ## Install
 
 ```sh
 brew tap adgan/tap
 brew trust adgan/tap
-brew install --HEAD adgan/tap/contui
+brew install adgan/tap/contui
 ```
 
-You need macOS (Apple silicon or Intel) and the Xcode Command Line Tools. Budget a few
-gigabytes for the build dependencies and a few minutes for the build.
+Requires macOS 26 (Tahoe) on Apple Silicon. The build dependencies (Rust, LLVM and their
+dependencies, a few gigabytes) are only installed when a bottle is unavailable.
 
 Homebrew 7 refuses formulae from third-party taps until they are trusted; that is what
 `brew trust` is for. On older Homebrew it does nothing.
@@ -40,8 +41,10 @@ Gatekeeper: right-click the app in Finder and choose **Open** once.
 
 ```sh
 brew update
-brew reinstall --HEAD adgan/tap/contui
+brew upgrade contui
 ```
+
+`brew reinstall --HEAD adgan/tap/contui` rebuilds from `main` if you want the tip.
 
 ## Uninstall
 
