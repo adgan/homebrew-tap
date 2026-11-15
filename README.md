@@ -60,12 +60,27 @@ rm -f /Applications/contUI.app
 2. Tag the app repo: `git tag -a vX.Y.Z -m "X.Y.Z" && git push origin vX.Y.Z`.
 3. Dispatch the release by hand — nothing runs from the tag alone:
    `gh workflow run release.yml -f version=X.Y.Z`. The Linux job publishes the source
-   tarball; the macOS job bottles it and prints the new `Formula/contui.rb` in the run
-   summary.
-4. Copy that formula into `Formula/contui.rb`, commit, push this tap.
+   tarball; the macOS job bottles it and uploads the finished formula as the `formula`
+   workflow artifact.
+4. Download that artifact and copy it in — not the run summary, which is markdown and
+   mangles the comments and indentation:
+
+   ```sh
+   gh run download <run-id> -n formula -D /tmp/contui-formula
+   cp /tmp/contui-formula/contui.rb Formula/contui.rb
+   git commit -am "contui X.Y.Z" && git push
+   ```
 5. `brew uninstall contui && brew install adgan/tap/contui` — expect `Pouring`.
 
 Requires macOS 26 (Tahoe) on Apple Silicon. Other platforms have no bottle.
+
+A published version must not be re-dispatched: the bottle is not reproducible, and
+replacing the asset under the sha this formula pins breaks every install. Cut a new
+version instead; the workflow refuses to overwrite a release that already has assets.
+
+0.1.0 was published before the generator stopped writing the redundant `version` line, so
+its formula here was corrected by hand and its tag cannot be re-dispatched. Start from
+0.1.1.
 
 Add `Casks/contui.rb` only once the app is Developer ID-signed and notarized; a cask
 wrapping an ad-hoc, unnotarized bundle is blocked by Gatekeeper after download.
