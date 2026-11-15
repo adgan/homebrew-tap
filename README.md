@@ -53,19 +53,16 @@ rm -f /Applications/contUI.app
 
 ## Releasing (maintainer)
 
-1. Tag the app repo: `git tag v0.1.0 && git push origin v0.1.0`.
-2. Add the stable source to `Formula/contui.rb`:
-   `url "https://github.com/adgan/contui/archive/refs/tags/v0.1.0.tar.gz"` with the sha256
-   from `curl -sL <url> | shasum -a 256`. Keep the `head` block.
-3. Build and launch it from the stable URL: `brew install --build-from-source adgan/tap/contui`.
-   `brew install adgan/tap/contui` must now work without `--HEAD`.
-4. `brew bottle adgan/tap/contui`; upload the bottle to a release named `bottles` in this
-   repository and paste the generated bottle block (with `root_url` pointing at that
-   release) into the formula. The bottle is arm64-only by design (the design targets
-   Apple silicon; Intel builds are untested), so do not advertise one for Intel.
-5. Add `Casks/contui.rb` only once the app is Developer ID-signed and notarized; a cask
-   wrapping an ad-hoc, unnotarized bundle is blocked by Gatekeeper after download. If
-   notarization is out of scope, skip the cask and keep the formula as the install path.
-   When it exists, change this README's install line to
-   `brew install --cask adgan/tap/contui`.
-6. Tick Task 10 in the app repo's plan, `docs/superpowers/plans/2026-11-14-contui.md`.
+1. Bump `version` in `contui`'s `Cargo.toml` and `assets/Info.plist`, commit, push `main`.
+2. Tag the app repo: `git tag -a vX.Y.Z -m "X.Y.Z" && git push origin vX.Y.Z`.
+3. Dispatch the release by hand — nothing runs from the tag alone:
+   `gh workflow run release.yml -f version=X.Y.Z`. The Linux job publishes the source
+   tarball; the macOS job bottles it and prints the new `Formula/contui.rb` in the run
+   summary.
+4. Copy that formula into `Formula/contui.rb`, commit, push this tap.
+5. `brew uninstall contui && brew install adgan/tap/contui` — expect `Pouring`.
+
+Requires macOS 26 (Tahoe) on Apple Silicon. Other platforms have no bottle.
+
+Add `Casks/contui.rb` only once the app is Developer ID-signed and notarized; a cask
+wrapping an ad-hoc, unnotarized bundle is blocked by Gatekeeper after download.
